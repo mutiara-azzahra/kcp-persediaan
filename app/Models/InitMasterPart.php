@@ -18,7 +18,7 @@ class InitMasterPart extends Model
         return $this->belongsTo(DbpAop::class, 'part_no', 'part_no');
     }
 
-    public function modal()
+    public function master()
     {
         return $this->belongsTo(PartAOPMaster::class, 'part_no', 'part_no');
     }

@@ -22,24 +22,23 @@
 
         <div class="card" style="padding: 10px;">
             <div class="card-body">
-                <strong>Tata Cara Proses Upload Surat Tagihan dan Rekap Tagihan</strong><br>
+                <strong>Tata Cara Proses Upload DBP</strong><br>
                 <ul>
-                    <li>Apabila sudah diproses untuk dua area, dapat dilihat hasilnya pada tombol Lihat Nilai Persediaan</li>
+                    <li>Masukkan File dengan Format Excel yang sudah disediakan, lalu klik tombol Up</li>
                 </ul>
             </div>
         </div>
         <div class="card" style="padding: 10px;">
             <div class="card-body">
                 <div class="float-left p-1">
-                    <a class="btn btn-success" href="{{ route('pembelian-aop.formUploadRekap')}}"><i class="fas fa-upload"></i> Upload Rekap Tagihan</a>
-                </div>
-                <div class="float-left p-1">
-                    <a class="btn btn-warning" href="{{ route('pembelian-aop.formUploadSurat')}}"><i class="fas fa-file"></i> Upload Surat Tagihan</a>
+                    <a class="btn btn-success" href="{{ route('pembelian-aop.formUploadRekap')}}"><i class="fas fa-upload"></i> Upload Excel DBP</a>
                 </div>
             </div>
         </div>
-        <div class="card" style="padding: 20px;">
-            <div class="col">
+
+        <div class="card" style="padding: 10px;">
+            <div class="card-body">
+                <div class="col">
                     <div class="col-lg-12">  
                         <table class="table table-hover table-bordered table-sm bg-light table-striped" id="example1">
                         <thead>
@@ -59,14 +58,14 @@
                             $no=1;
 
                             @endphp
-                            {{--  --}}
                         </tbody>
                     </table>
                    
                     </div>
                 </div>
-
-                </div>
+            </div>
+        </div>
+                
 
 </div>
 @endsection

@@ -50,15 +50,15 @@ class PembelianAOPController extends Controller
                     $data = explode("\t", $row); 
                     if (count($data) == 10) {
                         RekapTagihan::create([
-                            'customer_number' => $data[0],
-                            'customer_name' => $data[1],
-                            'invoice_aop' => $data[2],
+                            'customer_number'       => $data[0],
+                            'customer_name'         => $data[1],
+                            'invoice_aop'           => $data[2],
                             'billing_document_date' => $data[3],
-                            'tanggal_jatuh_tempo' => $data[4],
-                            'billing_amount_ppn' => $data[5],
-                            'additional_discount' => $data[6],
-                            'cash_discount' => $data[7],
-                            'extra_discount' => $data[8], 
+                            'tanggal_jatuh_tempo'   => $data[4],
+                            'billing_amount_ppn'    => $data[5],
+                            'additional_discount'   => $data[6],
+                            'cash_discount'         => $data[7],
+                            'extra_discount'        => $data[8], 
                         ]);
                     }
                 }
@@ -81,16 +81,16 @@ class PembelianAOPController extends Controller
             foreach ($rows as $row) {
                 $data = explode("\t", $row); 
                 SuratTagihan::create([
-                    'customer_number' => $row[1],
-                    'customer_name' => $row[2],
-                    'invoice_aop' => $row[3],
+                    'customer_number'       => $row[1],
+                    'customer_name'         => $row[2],
+                    'invoice_aop'           => $row[3],
                     'billing_document_date' => $row[4],
-                    'part_no' => $row[5], //part_no
-                    'billing_quantity' => $row[6], //qty
-                    'billing_amount' => $row[7],
-                    'spb_no' => $row[8], //invoice_aop
-                    'tanggal_cetak_faktur' => $row[9], 
-                    'tanggal_jatuh tempo' => $row[10], 
+                    'part_no'               => $row[5], //part_no
+                    'billing_quantity'      => $row[6], //qty
+                    'billing_amount'        => $row[7],
+                    'spb_no'                => $row[8], //invoice_aop
+                    'tanggal_cetak_faktur'  => $row[9], 
+                    'tanggal_jatuh tempo'   => $row[10], 
                 ]);
             }
 
@@ -130,12 +130,31 @@ class PembelianAOPController extends Controller
         $stock = InitMasterPart::where('kd_gudang', $kode->kode_gudang)
             ->get();
         
-        $total_init = 0;
+        // $total_init = 0;
         
-        foreach($stock as $s){
-            $init = $s->stock_akhir * $s->dbp->het;
-            $total_init += $init;
+        // foreach($stock as $s){
+        //     $init = $s->stock_akhir * (($s->dbp->het * (100 - ($s->master->level->diskon)))/100) / 1.11;
+        // }
+
+        // $total_init += $init;
+
+
+        $total_init = 0;
+
+        foreach ($stock as $s) {
+            if (
+                isset($s->stock_akhir, $s->dbp->het, $s->master, $s->master->level, $s->master->level->diskon) &&
+                is_numeric($s->stock_akhir) && is_numeric($s->dbp->het) && is_numeric($s->master->level->diskon)
+            ) {
+                $init = $s->stock_akhir * (($s->dbp->het * (100 - $s->master->level->diskon)) / 100) / 1.11;
+                $total_init += $init;
+            }
         }
+
+
+        // dd($total_init);
+       
+        
 
 
         //DBP AOP
@@ -160,7 +179,9 @@ class PembelianAOPController extends Controller
         //PEMBELIAN AOP
         $getPembelianAOP = InvoiceAOPHeader::where('kd_gudang', $kode->kode_gudang)
             ->whereBetween('billingDocument_date', [$tanggal_awal, $tanggal_akhir])
-            ->get();
+            ->first();
+
+        dd($getPembelianAOP->details);
 
         //RETUR AOP
         $getReturAOP = ReturAOPHeader::whereBetween('crea_date', [$tanggal_awal, $tanggal_akhir])
@@ -189,15 +210,12 @@ class PembelianAOPController extends Controller
             $total_retur += $returHeader->details_retur->nominal_total;
         }
 
-       // dd($total_retur);
-
-       // dd($total_init, $dbp, $retur_aop, $penjualan, $total_retur);
-
         //INSERT KE TABEL NILAI PERSEDIAAN
         $checkBulan = NilaiPersediaan::where('bulan', $bulan)->first();
         $checkTahun = NilaiPersediaan::where('bulan', $bulan)->first();
         $checkArea = NilaiPersediaan::where('area_inv', $kd)->first();
 
+        //dd($checkBulan);
         $getPersediaanAkhirPrev = NilaiPersediaan::where('bulan', $bulan_prev)->where('area_inv', $kd)->pluck('persediaan_akhir')->first();       
 
 
@@ -234,9 +252,12 @@ class PembelianAOPController extends Controller
             $data['persediaan_akhir']       = $getPersediaanAkhirPrev + $dbp - $retur_aop - $penjualan + $total_retur ;
             $data['status']                 = 'Y';
             $data['crea_date']              = Carbon::now();
-            
-            dd($data);
+
           //  NilaiPersediaan::create($data);
+        } elseif ($checkBulan !== null && $checkTahun !== null && $checkArea !== null) {
+
+             return redirect()->route('pembelian-aop.proses')->with('warning','Data persediaan sudah tersedia');
+
         }
             
         return redirect()->route('pembelian-aop.proses')->with('success','Data baru berhasil ditambahkan');

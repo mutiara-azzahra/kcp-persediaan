@@ -7,17 +7,13 @@
              <div class="float-left">
                 <h4><b>Proses Persediaan</b></h4>
             </div>
-            {{-- <div class="float-right">
-                <a class="btn btn-success" href="{{ route('pembelian-aop.index')}}"><i class="fas fa-arrow-left"></i> Kembali</a>
-            </div> --}}
         </div>
     </div>
-
-    @if ($message = Session::get('success'))
+            @if ($message = Session::get('success'))
                 <div class="alert alert-success">
                     <p>{{ $message }}</p>
                 </div>
-    @endif
+            @endif
 
             <div class="card" style="padding: 10px;">
                 <div class="card-body">
@@ -57,12 +53,11 @@
                             </div>
                         </form>
                 </div>
-                
             </div>
             <div class="card" style="padding: 10px;">
                 <div class="card-body">
                     <div class="col-lg-12">  
-                        <table class="table table-hover table-bordered table-sm bg-light" id="dataTable">
+                        <table class="table table-hover table-bordered table-sm bg-light" id="example2">
                             <thead>
                                 <tr>
                                     <th class="text-center">No</th>
@@ -82,7 +77,6 @@
                                 @endphp
 
                                 @foreach($persediaan as $p)
-
                                 <tr>
                                     <td>{{ $no++ }}</td>
                                     <td>{{ $p->area_inv }}</td>
@@ -94,21 +88,41 @@
                                     <td>{{ $p->retur_modal_terjual }}</td>
                                     <td>{{ $p->persediaan_akhir }}</td>
                                 </tr>
-
-
                                 @endforeach
-                             
                             </tbody>
                         </table>
-                    
                 </div>
             </div>
         </div>
-        
 </div>
 @endsection
 
 @section('script')
 
+    <script>
+      $(function () {
+        $("#example1")
+          .DataTable({
+            paging: true,
+            responsive: true,
+            lengthChange: false,
+            autoWidth: false,
+            buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"],
+          })
+          .buttons()
+          .container()
+          .appendTo("#example1_wrapper .col-md-6:eq(0)")
+                  
+        $("#example2").DataTable({
+          paging: true,
+          lengthChange: false,
+          searching: false,
+          ordering: true,
+          info: true,
+          autoWidth: false,
+          responsive: true,
+        });
+      });
+    </script>
 
 @endsection
