@@ -17,4 +17,14 @@ class InvoiceAOPDetails extends Model
     {
         return $this->belongsTo(InvoiceAOPHeader::class, 'invoice_aop', 'invoice_aop');
     }
+
+    public function master()
+    {
+        return $this->belongsTo(PartAOPMaster::class, 'part_no', 'part_no');
+    }
+
+    public function dbp()
+    {
+        return $this->belongsTo(DbpAop::class, 'part_no', 'part_no');
+    }
 }

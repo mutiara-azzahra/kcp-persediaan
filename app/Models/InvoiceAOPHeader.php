@@ -18,7 +18,6 @@ class InvoiceAOPHeader extends Model
     {
         return $this->hasMany(InvoiceAOPDetails::class, 'invoice_aop', 'invoice_aop');
     }
-
-
+    
     
 }

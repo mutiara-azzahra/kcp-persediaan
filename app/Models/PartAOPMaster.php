@@ -26,4 +26,9 @@ class PartAOPMaster extends Model
     public function level(){
         return $this->belongsTo(MasterLevel4::class, 'id_level', 'id');
     }
+
+    public function invoice_details()
+    {
+        return $this->hasMany(InvoiceAOPDetails::class, 'part_no', 'part_no');
+    }
 }
