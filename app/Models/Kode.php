@@ -13,4 +13,9 @@ class Kode extends Model
     protected $primaryKey = 'id';
     public $timestamps = false;
 
+    public function persediaan()
+    {
+        return $this->hasMany(NilaiPersediaan::class, 'area_inv', 'kode_area');
+    }
+
 }

@@ -42,6 +42,7 @@
                                     <label for="">Tanggal Awal</label>
                                     <input type="date" name="tanggal_awal" id="" class="form-control" placeholder="">
                                 </div>
+
                                 <div class="form-group col-4">
                                     <label for="">Tanggal Akhir</label>
                                     <input type="date" name="tanggal_akhir" id="" class="form-control" placeholder="">
@@ -57,11 +58,11 @@
             <div class="card" style="padding: 10px;">
                 <div class="card-body">
                     <div class="col-lg-12">  
-                        <table class="table table-hover table-bordered table-sm bg-light" id="example2">
+                        <table class="table table-hover table-bordered table-sm bg-light" id="example1">
                             <thead>
                                 <tr>
                                     <th class="text-center">No</th>
-                                    <th class="text-center">Kode Daerah</th>
+                                    <th class="text-center">Area</th>
                                     <th class="text-center">Bulan - Tahun</th>
                                     <th class="text-center">Persediaan Awal</th>
                                     <th class="text-center">Pembelian AOP</th>
@@ -79,14 +80,14 @@
                                 @foreach($persediaan as $p)
                                 <tr>
                                     <td>{{ $no++ }}</td>
-                                    <td>{{ $p->area_inv }}</td>
+                                    <td>{{ $p->kode->nama_gudang }}</td>
                                      <td>{{ $p->bulan }} - {{ $p->tahun }}</td>
-                                    <td>{{ $p->persediaan_awal }}</td>
-                                    <td>{{ $p->pembelian }}</td>
-                                    <td>{{ $p->retur_aop }}</td>
-                                    <td>{{ $p->modal_terjual }}</td>
-                                    <td>{{ $p->retur_modal_terjual }}</td>
-                                    <td>{{ $p->persediaan_akhir }}</td>
+                                    <td class="text-right">{{ number_format($p->persediaan_awal, 0, ',', '.') }}</td>
+                                    <td class="text-right">{{ number_format($p->pembelian, 0, ',', '.') }}</td>
+                                    <td class="text-right">{{ number_format($p->retur_aop, 0, ',', '.') }}</td>
+                                    <td class="text-right">{{ number_format($p->modal_terjual, 0, ',', '.') }}</td>
+                                    <td class="text-right">{{ number_format($p->retur_modal_terjual, 0, ',', '.') }}</td>
+                                    <td class="text-right">{{ number_format($p->persediaan_akhir, 0, ',', '.') }}</td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -123,6 +124,24 @@
           responsive: true,
         });
       });
+    </script>
+    
+    <script>
+    $(document).ready(function() {
+        $('#tanggal_awal').change(function() {
+            var selectedDate = $(this).val();
+            
+            if (selectedDate) {
+                // Get the year and month from the selected date
+                var year = selectedDate.split('-')[0];
+                var month = selectedDate.split('-')[1];
+                
+                // Set the date input to the first day of the selected month
+                var firstDayOfMonth = year + '-' + month + '-01';
+                $(this).val(firstDayOfMonth);
+            }
+        });
+    });
     </script>
 
 @endsection

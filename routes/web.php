@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PembelianAOPController;
+use App\Http\Controllers\UploadDBPController;
 use App\Http\Controllers\StockController;
 
 
@@ -32,4 +33,8 @@ Route::get('/pembelian-aop/tampil', [PembelianAOPController::class, 'tampil'])->
 
 
 Route::get('/stock', [StockController::class, 'index'])->name('stock.index');
+
+Route::get('/upload-dbp', [UploadDBPController::class, 'index'])->name('upload-dbp.index');
+Route::get('/upload-dbp/upload', [UploadDBPController::class, 'upload'])->name('upload-dbp.upload');
+
 

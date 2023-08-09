@@ -27,4 +27,9 @@ class NilaiPersediaan extends Model
         'crea_date',
         'modi_date'
     ];
+
+    public function kode()
+    {
+        return $this->hasOne(Kode::class, 'kode_area', 'area_inv');
+    }
 }
