@@ -24,7 +24,6 @@ class PembelianAOPController extends Controller
 {
     public function index(){
 
-        // $suratTagihan = SuratTagihan::all();
         return view('pembelian-aop.index');
     }
     public function formUploadRekap(){

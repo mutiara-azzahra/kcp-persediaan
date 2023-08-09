@@ -184,8 +184,14 @@
                   <p>Upload Pembelian</p>
                 </a>
             </li> --}}
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <a href="{{ route('pembelian-aop.index')}}" class="nav-link">
+                  <p>Upload DBP</p>
+                </a>
+            </li> --}}
+
+            <li class="nav-item">
+                <a href="{{ route('upload-dbp.index')}}" class="nav-link">
                   <p>Upload DBP</p>
                 </a>
             </li>
