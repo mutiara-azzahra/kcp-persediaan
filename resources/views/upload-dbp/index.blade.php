@@ -3,9 +3,41 @@
 @section('content')
 <div class="container" style="padding: 10px;">
     <div class="row mt-5">
-        <div class="col-lg-12 margin-tb p-3">
+        <div class="col-lg-12 margin-tb pb-3">
              <div class="float-left">
                 <h4><b>DBP</b></h4>
+            </div>
+
+            <div class="float-right">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Open modal for @mdo</button>
+
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Upload Excel HET DBP</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="customFile">
+                                        <label class="custom-file-label" for="customFile">Pilih File</label>
+                                    </div>                                    
+                                </div>
+                        </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                                <button type="button" class="btn btn-success"><i class="fas fa-upload"></i> Upload</button>
+                            </div>
+                        </div>
+
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -26,13 +58,6 @@
                 <ul>
                     <li>Masukkan File dengan Format Excel yang sudah disediakan, lalu klik tombol Upload</li>
                 </ul>
-            </div>
-        </div>
-        <div class="card" style="padding: 10px;">
-            <div class="card-body">
-                <div class="float-left p-1">
-                    <a class="btn btn-success" href=""><i class="fas fa-upload"></i> Upload Excel DBP</a>
-                </div>
             </div>
         </div>
 

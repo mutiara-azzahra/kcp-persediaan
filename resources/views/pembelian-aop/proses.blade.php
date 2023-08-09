@@ -3,7 +3,7 @@
 @section('content')
 <div class="container" style="padding: 10px;">
     <div class="row mt-5">
-        <div class="col-lg-12 margin-tb p-3">
+        <div class="col-lg-12 pb-3">
              <div class="float-left">
                 <h4><b>Proses Persediaan</b></h4>
             </div>
@@ -12,6 +12,7 @@
             @if ($message = Session::get('success'))
                 <div class="alert alert-success">
                     <p>{{ $message }}</p>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
 
