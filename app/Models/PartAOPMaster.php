@@ -31,4 +31,8 @@ class PartAOPMaster extends Model
     {
         return $this->hasMany(InvoiceAOPDetails::class, 'part_no', 'part_no');
     }
+
+    public function kode_part(){
+        return $this->belongsTo(KodePart::class, 'id_part', 'id');
+    }
 }

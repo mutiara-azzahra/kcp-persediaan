@@ -24,7 +24,7 @@
             <div class="card-body">
                 <strong>Tata Cara Proses Upload DBP</strong><br>
                 <ul>
-                    <li>Masukkan File dengan Format Excel yang sudah disediakan, lalu klik tombol Up</li>
+                    <li>Masukkan File dengan Format Excel yang sudah disediakan, lalu klik tombol Upload</li>
                 </ul>
             </div>
         </div>
@@ -36,7 +36,7 @@
             </div>
         </div>
 
-        <div class="card" style="padding: 10px;">
+        <div class="card" style="padding:10px;">
             <div class="card-body">
                 <div class="col">
                     <div class="col-lg-12">
@@ -45,9 +45,10 @@
                                 <tr>
                                     <th class="text-center">No</th>
                                     <th class="text-center">Part No</th>
-                                    <th class="text-center">Level</th>
-                                    <th class="text-center">Kode Barang</th>
                                     <th class="text-center">HET</th>
+                                    <th class="text-center">Diskon + Add %</th>
+                                    <th class="text-center">Level</th>
+                                    <th class="text-center">Kode</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -55,17 +56,21 @@
                                 $no=1;
                                 @endphp
 
-                                @foreach($dbp as $p)
+                                @foreach($test as $p)
                                 <tr>
                                     <td>{{ $no++ }}</td>
                                     <td>{{ $p->part_no->part_no }}</td>
-                                    <td>{{ $p->part_no->level->level4 }}</td>
-                                    <td>{{ $p->part_no->id_part }}</td>
                                     <td class="text-right">{{ number_format($p->het, 0, ',', '.') }}</td>
+                                    <td class="text-center">{{ $p->part_no->level->diskon }} %</td>
+                                    <td>{{ $p->part_no->level->level4 }}</td>
+                                    <td>{{ $p->part_no->kode_part->kode }}</td>
+                                    
                                 </tr>
+
                                 @endforeach
                             </tbody>
                         </table>
+
                     </div>
                 </div>
             </div>

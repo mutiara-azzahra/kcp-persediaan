@@ -18,4 +18,9 @@ class PartAOPModal extends Model
     {
         return $this->hasOne(PartAOPMaster::class, 'id', 'id_part_no');
     }
+
+    public function kode_part()
+    {
+        return $this->belongsTo(KodePart::class, 'id_part', 'id');
+    }
 }
