@@ -35,6 +35,6 @@ Route::get('/pembelian-aop/tampil', [PembelianAOPController::class, 'tampil'])->
 Route::get('/stock', [StockController::class, 'index'])->name('stock.index');
 
 Route::get('/upload-dbp', [UploadDBPController::class, 'index'])->name('upload-dbp.index');
-Route::get('/upload-dbp/upload', [UploadDBPController::class, 'upload'])->name('upload-dbp.upload');
+Route::post('/upload-dbp', [UploadDBPController::class, 'uploadDbp'])->name('upload-dbp.uploadDbp');
 
 

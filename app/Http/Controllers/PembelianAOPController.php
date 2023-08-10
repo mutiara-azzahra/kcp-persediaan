@@ -262,7 +262,7 @@ class PembelianAOPController extends Controller
         } 
         elseif ($checkData !== null) {
 
-             return redirect()->route('pembelian-aop.proses')->with('warning','Data persediaan sudah tersedia!');
+            return redirect()->route('pembelian-aop.proses')->with('warning','Data persediaan sudah tersedia!');
 
         }
             

@@ -13,6 +13,10 @@ class PartAOPModal extends Model
     protected $primaryKey = 'id';
     public $timestamps = false;
 
+    protected $fillable =[
+        'het',
+        'modi_date'
+    ];
 
     public function part_no()
     {
