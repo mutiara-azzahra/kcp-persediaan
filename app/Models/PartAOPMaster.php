@@ -35,4 +35,13 @@ class PartAOPMaster extends Model
     public function kode_part(){
         return $this->belongsTo(KodePart::class, 'id_part', 'id');
     }
+
+    public function transaksi(){
+        return $this->hasMany(TransaksiInvoiceDetails::class, 'part_no', 'part_no');
+    }
+
+    public function dbp()
+    {
+        return $this->belongsTo(DbpAop::class, 'part_no', 'part_no');
+    }
 }

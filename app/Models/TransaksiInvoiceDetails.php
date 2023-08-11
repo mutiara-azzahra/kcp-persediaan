@@ -12,4 +12,10 @@ class TransaksiInvoiceDetails extends Model
     protected $table = 'trns_inv_details';
     protected $primaryKey = 'id';
     public $timestamps = false;
+
+
+    public function master()
+    {
+        return $this->belongsTo(PartAOPMaster::class, 'part_no', 'part_no');
+    }
 }
