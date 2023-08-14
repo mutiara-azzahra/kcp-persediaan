@@ -18,4 +18,9 @@ class TransaksiInvoiceDetails extends Model
     {
         return $this->belongsTo(PartAOPMaster::class, 'part_no', 'part_no');
     }
+
+    public function dbp_jual()
+    {
+        return $this->belongsTo(PartAOPDbp::class, 'part_no', 'part_no');
+    }
 }

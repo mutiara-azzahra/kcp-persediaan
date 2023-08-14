@@ -103,7 +103,7 @@
             </li>
             <li class="nav-item">
                 <a href="{{ route('pembelian-aop.proses')}}" class="nav-link">
-                  <p>Persediaan</p>
+                  <p>Persediaan AOP</p>
                 </a>
             </li>
         </ul>

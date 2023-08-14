@@ -12,10 +12,13 @@ use App\Models\Kode;
 use App\Models\InitMasterPart;
 use App\Models\ReturAOPDetails;
 use App\Models\ReturAOPHeader;
+use App\Models\PartAOPMaster;
 use App\Models\TransaksiInvoiceDetails;
 use App\Models\InvoiceAOPDetails;
 use App\Models\InvoiceAOPHeader;
 use App\Models\NilaiPersediaan;
+use App\Models\MstInit;
+use App\Models\PartAOPDbp;
 use App\Models\TransaksiReturHeader;
 use App\Models\SuratTagihan;
 
@@ -115,6 +118,7 @@ class PembelianAOPController extends Controller
         $tanggal_awal   = $request->input('tanggal_awal');
         $tanggal_akhir  = $request->input('tanggal_akhir');
         $kd             = $request->input('area_inv');
+        $aop            = 1;
 
         //dd($tanggal_awal);
 
@@ -132,20 +136,35 @@ class PembelianAOPController extends Controller
         $stock = InitMasterPart::where('kd_gudang', $kode->kode_gudang)
             ->get();
 
+        $stock1 = MstInit::all();
+
+        $test = $stock1->sum('amt_stock_akhir');
+
+        //dd($test);
+
+
         //Init Januari 2023
         $total_init = 0;
 
-        foreach ($stock as $s) {
-            if (
-                isset($s->stock_akhir, $s->dbp->het, $s->master, $s->master->level, $s->master->level->diskon) &&
-                is_numeric($s->stock_akhir) && is_numeric($s->dbp->het) && is_numeric($s->master->level->diskon)
-            ) {
-                $init = $s->stock_akhir * (($s->dbp->het * (100 - $s->master->level->diskon)) / 100) / 1.11;
-                $total_init += $init;
-            }
+        // foreach ($stock as $s) {
+        //     if (
+        //         isset($s->stock_akhir, $s->dbp->het, $s->master, $s->master->level, $s->master->level->diskon) &&
+        //         is_numeric($s->stock_akhir) && is_numeric($s->dbp->het) && is_numeric($s->master->level->diskon)
+        //     ) {
+        //         $init = $s->stock_akhir * (($s->dbp->het * (100 - $s->master->level->diskon)) / 100) / 1.11;
+        //         $total_init += $init;
+        //     }
 
-            // dd($total_init);
+            
+        // }
+
+        $test1 = 0;
+        foreach($stock as $s){
+            $test = $s->amt_stock_akhir;
+            $test1+=$test;
         }
+
+        //dd($test1);
 
         //PEMBELIAN AOP (/1.11)
         $getPembelianAOP = InvoiceAOPHeader::where('kd_gudang', $kode->kode_gudang)
@@ -154,21 +173,40 @@ class PembelianAOPController extends Controller
 
         $dbp_pembelian = 0;
 
-        foreach($getPembelianAOP as $p){
+        //Pembelian AOP ex disc
+
+            foreach($getPembelianAOP as $p){
+
             $invoice_details = $p->details;
+                foreach($invoice_details as $h){
 
-            foreach($invoice_details as $h){
-
-                if (
-                    isset($h->qty, $h->dbp->het, $h->master->level->diskon) &&
-                    is_numeric($h->qty) && is_numeric($h->dbp->het) && is_numeric($h->master->level->diskon)
-                ) {
-                    $dbp = $h->qty * ($h->dbp->het * (100 - $h->master->level->diskon)/100) / 1.11;
+                    $dbp = $h->qty * $h->dbp_jual->het;
                     $dbp_pembelian += $dbp;
                 }
 
             }
-        }
+
+            //dd($dbp_pembelian);
+
+
+
+        //Pembelian AOP het * disc
+
+        // foreach($getPembelianAOP as $p){
+        //     $invoice_details = $p->details;
+
+        //     foreach($invoice_details as $h){
+
+        //         if (
+        //             isset($h->qty, $h->dbp->het, $h->master->level->diskon) &&
+        //             is_numeric($h->qty) && is_numeric($h->dbp->het) && is_numeric($h->master->level->diskon)
+        //         ) {
+        //             $dbp = $h->qty * ($h->dbp->het * (100 - $h->master->level->diskon)/100) / 1.11;
+        //             $dbp_pembelian += $dbp;
+        //         }
+
+        //     }
+        // }
 
         //RETUR AOP
         $getReturAOP = ReturAOPHeader::whereBetween('crea_date', [$tanggal_awal, $tanggal_akhir])
@@ -178,14 +216,13 @@ class PembelianAOPController extends Controller
 
         $retur_aop = $getReturAOP->sum('amount_total');
 
+        //penjualan part_aop
+        $part_aop = PartAOPMaster::where('id_part', $aop)->pluck('part_no');
 
-        //PENJUALAN 
         $getPenjualan = TransaksiInvoiceDetails::where('area_inv', $kode->kode_area)
             ->whereBetween('crea_date', [$tanggal_awal, $tanggal_akhir])
+            ->whereIn('part_no', $part_aop)
             ->get();
-        
-        // $getPenjualan = TransaksiInvoiceDetails::whereBetween('crea_date', [$tanggal_awal, $tanggal_akhir])
-        //     ->get();
 
         $penjualan = 0;
         
@@ -197,6 +234,29 @@ class PembelianAOPController extends Controller
         }
 
 
+        //PENJUALAN BARU
+
+        $penjualan_1 = 0;
+
+        foreach($getPenjualan as $p) {
+            $penjualan_dbp = $p->qty * $p->dbp_jual->het;
+            $penjualan_1 += $penjualan_dbp;
+
+            // var_dump($p->part_no);
+            // var_dump($penjualan_dbp);
+
+
+            // dd($p);
+        }
+
+       // var_dump($penjualan_1);
+
+        //dd($penjualan_1);
+
+        dd($penjualan_1);
+
+    
+
         //RETUR PENJUALAN
         $getReturPenjualan = TransaksiReturHeader::whereBetween('flag_approve1_date', [$tanggal_awal, $tanggal_akhir])
             ->where('area_retur', $kode->kode_area)
@@ -206,6 +266,7 @@ class PembelianAOPController extends Controller
         $total_retur = 0;
 
         foreach ($getReturPenjualan as $r) {
+
             $total_retur += $r->details_retur->nominal_total/1.11;
         }
 

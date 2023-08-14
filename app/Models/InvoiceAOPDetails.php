@@ -27,4 +27,10 @@ class InvoiceAOPDetails extends Model
     {
         return $this->belongsTo(DbpAop::class, 'part_no', 'part_no');
     }
+
+
+    public function dbp_jual()
+    {
+        return $this->belongsTo(PartAOPDbp::class, 'part_no', 'part_no');
+    }
 }

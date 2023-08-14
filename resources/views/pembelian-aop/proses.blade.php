@@ -85,7 +85,13 @@
                                     <td class="text-right">{{ number_format($p->persediaan_awal, 0, ',', '.') }}</td>
                                     <td class="text-right">{{ number_format($p->pembelian, 0, ',', '.') }}</td>
                                     <td class="text-right">{{ number_format($p->retur_aop, 0, ',', '.') }}</td>
-                                    <td class="text-right">{{ number_format($p->modal_terjual, 0, ',', '.') }}</td>
+
+                                    @if($p->area_inv == 'KT')
+                                        <td class="text-right" style="color:red;">( {{ number_format($p->modal_terjual, 0, ',', '.') }} )</td>
+                                    @else
+                                        <td class="text-right"> {{ number_format($p->modal_terjual, 0, ',', '.') }} </td>
+                                    @endif
+
                                     <td class="text-right">{{ number_format($p->retur_modal_terjual, 0, ',', '.') }}</td>
                                     <td class="text-right">{{ number_format($p->persediaan_akhir, 0, ',', '.') }}</td>
                                 </tr>
