@@ -112,9 +112,6 @@ class PembelianAOPController extends Controller
 
     public function prosesPersediaan(Request $request){
 
-        // $tanggal_awal = $request->input('tanggal_awal');
-        // $tanggal_akhir = (new \DateTime($tanggal_awal))->modify('+1 month')->format('Y-m-d');
-
         $tanggal_awal   = $request->input('tanggal_awal');
         $tanggal_akhir  = $request->input('tanggal_akhir');
         $kd             = $request->input('area_inv');
@@ -136,27 +133,19 @@ class PembelianAOPController extends Controller
         $stock = InitMasterPart::where('kd_gudang', $kode->kode_gudang)
             ->get();
 
-        $stock1 = MstInit::all();
-
-        $test = $stock1->sum('amt_stock_akhir');
-
-        //dd($test);
-
 
         //Init Januari 2023
         $total_init = 0;
 
-        // foreach ($stock as $s) {
-        //     if (
-        //         isset($s->stock_akhir, $s->dbp->het, $s->master, $s->master->level, $s->master->level->diskon) &&
-        //         is_numeric($s->stock_akhir) && is_numeric($s->dbp->het) && is_numeric($s->master->level->diskon)
-        //     ) {
-        //         $init = $s->stock_akhir * (($s->dbp->het * (100 - $s->master->level->diskon)) / 100) / 1.11;
-        //         $total_init += $init;
-        //     }
-
-            
-        // }
+        foreach ($stock as $s) {
+            if (
+                isset($s->stock_akhir, $s->dbp->het, $s->master, $s->master->level, $s->master->level->diskon) &&
+                is_numeric($s->stock_akhir) && is_numeric($s->dbp->het) && is_numeric($s->master->level->diskon)
+            ) {
+                $init = $s->stock_akhir * (($s->dbp->het * (100 - $s->master->level->diskon)) / 100) / 1.11;
+                $total_init += $init;
+            }
+        }
 
         $test1 = 0;
         foreach($stock as $s){
@@ -175,38 +164,35 @@ class PembelianAOPController extends Controller
 
         //Pembelian AOP ex disc
 
-            foreach($getPembelianAOP as $p){
+            // foreach($getPembelianAOP as $p){
 
-            $invoice_details = $p->details;
-                foreach($invoice_details as $h){
+            // $invoice_details = $p->details;
+            //     foreach($invoice_details as $h){
 
-                    $dbp = $h->qty * $h->dbp_jual->het;
-                    $dbp_pembelian += $dbp;
-                }
+            //         $dbp = $h->qty * $h->dbp_jual->het;
+            //         $dbp_pembelian += $dbp;
+            //     }
 
-            }
-
-            //dd($dbp_pembelian);
-
+            // }
 
 
         //Pembelian AOP het * disc
 
-        // foreach($getPembelianAOP as $p){
-        //     $invoice_details = $p->details;
+        foreach($getPembelianAOP as $p){
+            $invoice_details = $p->details;
 
-        //     foreach($invoice_details as $h){
+            foreach($invoice_details as $h){
 
-        //         if (
-        //             isset($h->qty, $h->dbp->het, $h->master->level->diskon) &&
-        //             is_numeric($h->qty) && is_numeric($h->dbp->het) && is_numeric($h->master->level->diskon)
-        //         ) {
-        //             $dbp = $h->qty * ($h->dbp->het * (100 - $h->master->level->diskon)/100) / 1.11;
-        //             $dbp_pembelian += $dbp;
-        //         }
+                if (
+                    isset($h->qty, $h->dbp->het, $h->master->level->diskon) &&
+                    is_numeric($h->qty) && is_numeric($h->dbp->het) && is_numeric($h->master->level->diskon)
+                ) {
+                    $dbp = $h->qty * ($h->dbp->het * (100 - $h->master->level->diskon)/100) / 1.11;
+                    $dbp_pembelian += $dbp;
+                }
 
-        //     }
-        // }
+            }
+        }
 
         //RETUR AOP
         $getReturAOP = ReturAOPHeader::whereBetween('crea_date', [$tanggal_awal, $tanggal_akhir])
@@ -229,10 +215,9 @@ class PembelianAOPController extends Controller
         foreach($getPenjualan as $p){
 
             $kurang_disc_ppn = $p->qty * ($p->master->dbp->het * ((100 - $p->master->level->diskon)/100) /1.11);
-            
             $penjualan += $kurang_disc_ppn;
-        }
 
+        }
 
         //PENJUALAN BARU
 
@@ -244,18 +229,9 @@ class PembelianAOPController extends Controller
 
             // var_dump($p->part_no);
             // var_dump($penjualan_dbp);
+            // dd($penjualan_dbp);
 
-
-            // dd($p);
         }
-
-       // var_dump($penjualan_1);
-
-        //dd($penjualan_1);
-
-        dd($penjualan_1);
-
-    
 
         //RETUR PENJUALAN
         $getReturPenjualan = TransaksiReturHeader::whereBetween('flag_approve1_date', [$tanggal_awal, $tanggal_akhir])
