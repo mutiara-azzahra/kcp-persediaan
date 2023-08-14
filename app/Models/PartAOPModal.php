@@ -18,13 +18,4 @@ class PartAOPModal extends Model
         'modi_date'
     ];
 
-    public function part_no()
-    {
-        return $this->hasOne(PartAOPMaster::class, 'id', 'id_part_no');
-    }
-
-    public function kode_part()
-    {
-        return $this->belongsTo(KodePart::class, 'id_part', 'id');
-    }
 }

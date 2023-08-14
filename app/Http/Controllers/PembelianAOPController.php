@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 use Carbon\Carbon;
 
-use App\Models\DbpAop;
+// use App\Models\DbpAop;
 use App\Models\Kode;
 use App\Models\InitMasterPart;
 use App\Models\ReturAOPDetails;
@@ -17,7 +17,7 @@ use App\Models\TransaksiInvoiceDetails;
 use App\Models\InvoiceAOPDetails;
 use App\Models\InvoiceAOPHeader;
 use App\Models\NilaiPersediaan;
-use App\Models\MstInit;
+// use App\Models\MstInit;
 use App\Models\PartAOPDbp;
 use App\Models\TransaksiReturHeader;
 use App\Models\SuratTagihan;
@@ -29,80 +29,7 @@ class PembelianAOPController extends Controller
 
         return view('pembelian-aop.index');
     }
-    public function formUploadRekap(){
-
-        return view('pembelian-aop.upload_rekap');
-    }
-    public function formUploadSurat(){
-
-        return view('pembelian-aop.upload_surat');
-    }
-
-    public function uploadRekap (Request $request){
-
-
-            if ($request->hasFile('rekap_tagihan')) {
-                $file = $request->file('rekap_tagihan');
-                $contents = file_get_contents($file);
-                $rows = explode("\n", $contents);
-
-                $header = array_shift($rows);
-                
-                foreach ($rows as $row) {
-                    $data = explode("\t", $row); 
-                    if (count($data) == 10) {
-                        RekapTagihan::create([
-                            'customer_number'       => $data[0],
-                            'customer_name'         => $data[1],
-                            'invoice_aop'           => $data[2],
-                            'billing_document_date' => $data[3],
-                            'tanggal_jatuh_tempo'   => $data[4],
-                            'billing_amount_ppn'    => $data[5],
-                            'additional_discount'   => $data[6],
-                            'cash_discount'         => $data[7],
-                            'extra_discount'        => $data[8], 
-                        ]);
-                    }
-                }
-
-                return redirect()->back()->with('success', 'Rekap Tagihan berhasil ditambahkan');
-            }
-
-        return redirect()->route('pembelian-aop.index')->with('warning','Rekap Tagihan Gagal Diupload');
-
-    }
-
-    public function uploadSurat (Request $request){
-
-        if ($request->hasFile('surat_tagihan')) {
-            
-            $file = $request->file('surat_tagihan');
-            $contents = file_get_contents($file);
-            $rows = explode("\n", $contents);
-
-            foreach ($rows as $row) {
-                $data = explode("\t", $row); 
-                SuratTagihan::create([
-                    'customer_number'       => $row[1],
-                    'customer_name'         => $row[2],
-                    'invoice_aop'           => $row[3],
-                    'billing_document_date' => $row[4],
-                    'part_no'               => $row[5], //part_no
-                    'billing_quantity'      => $row[6], //qty
-                    'billing_amount'        => $row[7],
-                    'spb_no'                => $row[8], //invoice_aop
-                    'tanggal_cetak_faktur'  => $row[9], 
-                    'tanggal_jatuh tempo'   => $row[10], 
-                ]);
-            }
-
-            return redirect()->back()->with('success', 'Rekap Tagihan berhasil ditambahkan');
-        }
-
-        return redirect()->route('pembelian-aop.index')->with('warning','Rekap Tagihan Gagal Diupload');
-        
-    }
-
+    
     public function proses(){
 
         $persediaan = NilaiPersediaan::all();
@@ -113,11 +40,11 @@ class PembelianAOPController extends Controller
     public function prosesPersediaan(Request $request){
 
         $tanggal_awal   = $request->input('tanggal_awal');
+
+        //if tanggal akhir <1 bulan
         $tanggal_akhir  = $request->input('tanggal_akhir');
         $kd             = $request->input('area_inv');
         $aop            = 1;
-
-        //dd($tanggal_awal);
 
         //PILIH PERSEDIAAN
         $tanggal = new Carbon($tanggal_awal);
@@ -133,27 +60,14 @@ class PembelianAOPController extends Controller
         $stock = InitMasterPart::where('kd_gudang', $kode->kode_gudang)
             ->get();
 
-
         //Init Januari 2023
         $total_init = 0;
 
-        foreach ($stock as $s) {
-            if (
-                isset($s->stock_akhir, $s->dbp->het, $s->master, $s->master->level, $s->master->level->diskon) &&
-                is_numeric($s->stock_akhir) && is_numeric($s->dbp->het) && is_numeric($s->master->level->diskon)
-            ) {
-                $init = $s->stock_akhir * (($s->dbp->het * (100 - $s->master->level->diskon)) / 100) / 1.11;
-                $total_init += $init;
-            }
+        foreach ($stock as $s){
+            $init = $s->amt_stock_akhir;
+            $total_init += $init;
         }
 
-        $test1 = 0;
-        foreach($stock as $s){
-            $test = $s->amt_stock_akhir;
-            $test1+=$test;
-        }
-
-        //dd($test1);
 
         //PEMBELIAN AOP (/1.11)
         $getPembelianAOP = InvoiceAOPHeader::where('kd_gudang', $kode->kode_gudang)
@@ -161,22 +75,6 @@ class PembelianAOPController extends Controller
             ->get();
 
         $dbp_pembelian = 0;
-
-        //Pembelian AOP ex disc
-
-            // foreach($getPembelianAOP as $p){
-
-            // $invoice_details = $p->details;
-            //     foreach($invoice_details as $h){
-
-            //         $dbp = $h->qty * $h->dbp_jual->het;
-            //         $dbp_pembelian += $dbp;
-            //     }
-
-            // }
-
-
-        //Pembelian AOP het * disc
 
         foreach($getPembelianAOP as $p){
             $invoice_details = $p->details;
@@ -189,6 +87,8 @@ class PembelianAOPController extends Controller
                 ) {
                     $dbp = $h->qty * ($h->dbp->het * (100 - $h->master->level->diskon)/100) / 1.11;
                     $dbp_pembelian += $dbp;
+
+                    dd($h->dbp);
                 }
 
             }
@@ -215,21 +115,18 @@ class PembelianAOPController extends Controller
         foreach($getPenjualan as $p){
 
             $kurang_disc_ppn = $p->qty * ($p->master->dbp->het * ((100 - $p->master->level->diskon)/100) /1.11);
+
             $penjualan += $kurang_disc_ppn;
 
         }
 
-        //PENJUALAN BARU
+        //PENJUALAN OPSI 2
 
         $penjualan_1 = 0;
 
         foreach($getPenjualan as $p) {
             $penjualan_dbp = $p->qty * $p->dbp_jual->het;
             $penjualan_1 += $penjualan_dbp;
-
-            // var_dump($p->part_no);
-            // var_dump($penjualan_dbp);
-            // dd($penjualan_dbp);
 
         }
 
@@ -254,35 +151,36 @@ class PembelianAOPController extends Controller
 
         $getPersediaanAkhirPrev = NilaiPersediaan::where('bulan', $bulan_prev)->where('area_inv', $kd)->pluck('persediaan_akhir')->first();       
 
-        // if ($checkData === null) {
+        if ($checkData === null) {
 
-        //     //init Januari 2023
-        //     $data['bulan']                  = $bulan;
-        //     $data['tahun']                  = $tahun;
-        //     $data['area_inv']               = $kd;
-        //     $data['persediaan_awal']        = $total_init;
-        //     $data['pembelian']              = $dbp_pembelian;
-        //     $data['retur_aop']              = $retur_aop;
-        //     $data['modal_terjual']          = $penjualan;
-        //     $data['persediaan_akhir']       = $total_init + $dbp_pembelian - $retur_aop - $penjualan + $total_retur ;
-        //     $data['retur_modal_terjual']    = $total_retur;
-        //     $data['status']                 = 'Y';
-        //     $data['crea_date']              = Carbon::now();
+            //init Januari 2023
+            $data['bulan']                  = $bulan;
+            $data['tahun']                  = $tahun;
+            $data['area_inv']               = $kd;
+            $data['persediaan_awal']        = $total_init;
+            $data['pembelian']              = $dbp_pembelian;
+            $data['retur_aop']              = $retur_aop;
+            $data['modal_terjual']          = $penjualan;
+            $data['retur_modal_terjual']    = $total_retur;
+            $data['persediaan_akhir']       = $total_init + $dbp_pembelian - $retur_aop - $penjualan + $total_retur ;
+            $data['status']                 = 'Y';
+            $data['crea_date']              = Carbon::now();
 
-        //     $inserted = NilaiPersediaan::create($data);
+            dd($data);
+            //$inserted = NilaiPersediaan::create($data);
 
-        //     if ($inserted) {
-        //         return redirect()->route('pembelian-aop.proses')->with('success', 'Data persediaan berhasil ditambahkan.');
+            if ($inserted) {
+                return redirect()->route('pembelian-aop.proses')->with('success', 'Data persediaan berhasil ditambahkan.');
 
-        //     } else {
-        //         return redirect()->route('pembelian-aop.proses')->with('danger', 'Data persediaan gagal ditambahkan.');
-        //     }
-        // }  
-        // elseif ($checkData !== null) {
+            } else {
+                return redirect()->route('pembelian-aop.proses')->with('danger', 'Data persediaan gagal ditambahkan.');
+            }
+        }  
+        elseif ($checkData !== null) {
 
-        //     return redirect()->route('pembelian-aop.proses')->with('warning','Data persediaan sudah tersedia!');
+            return redirect()->route('pembelian-aop.proses')->with('warning','Data persediaan sudah tersedia!');
 
-        // }
+        }
 
         if ($checkData === null) {
             //Next Bulan
@@ -293,13 +191,13 @@ class PembelianAOPController extends Controller
             $data['pembelian']              = $dbp_pembelian;
             $data['retur_aop']              = $retur_aop;
             $data['modal_terjual']          = $penjualan;
-            $data['persediaan_akhir']       = $getPersediaanAkhirPrev + $dbp_pembelian - $retur_aop - $penjualan + $total_retur ;
             $data['retur_modal_terjual']    = $total_retur;
+            $data['persediaan_akhir']       = $getPersediaanAkhirPrev + $dbp_pembelian - $retur_aop - $penjualan + $total_retur ;
             $data['status']                 = 'Y';
             $data['crea_date']              = Carbon::now();
   
             //dd($data);
-            $inserted = NilaiPersediaan::create($data);
+            //$inserted = NilaiPersediaan::create($data);
 
             if ($inserted) {
                 return redirect()->route('pembelian-aop.proses')->with('success', 'Data persediaan berhasil ditambahkan!');

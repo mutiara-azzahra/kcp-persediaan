@@ -18,11 +18,6 @@ class PartAOPMaster extends Model
         return $this->hasOne(InitMasterPart::class, 'id_part_no', 'id');
     }
 
-    public function modal()
-    {
-        return $this->belongsTo(PartAOPModal::class, 'id_part_no', 'id');
-    }
-
     public function level(){
         return $this->belongsTo(MasterLevel4::class, 'id_level', 'id');
     }

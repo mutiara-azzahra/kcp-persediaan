@@ -76,30 +76,13 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @php
-                                $no=1;
-                                @endphp
-
-                                @foreach($test as $p)
-                                <tr>
-                                    <td>{{ $no++ }}</td>
-                                    <td>{{ $p->part_no->part_no }}</td>
-                                    <td class="text-right">{{ number_format($p->het, 0, ',', '.') }}</td>
-                                    <td class="text-center">{{ $p->part_no->level->diskon }} %</td>
-                                    <td>{{ $p->part_no->level->level4 }}</td>
-                                    <td>{{ $p->part_no->kode_part->kode }}</td>
-                                    
-                                </tr>
-
-                                @endforeach
+                                
                             </tbody>
                         </table>
-
                     </div>
                 </div>
             </div>
         </div>
-                
 
 </div>
 @endsection

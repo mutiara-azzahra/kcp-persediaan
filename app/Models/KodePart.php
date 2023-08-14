@@ -17,8 +17,5 @@ class KodePart extends Model
     public function master(){
         return $this->hasMany(PartAOPMaster::class, 'id', 'id_part');
     }
-
-    public function part_no(){
-        return $this->hasMany(PartAOPModal::class, 'id_part', 'id');
-    }
+    
 }

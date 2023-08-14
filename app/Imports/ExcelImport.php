@@ -7,15 +7,14 @@ use Maatwebsite\Excel\Concerns\ToCollection;
 
 class ExcelImport implements ToCollection
 {
-    protected $data = []; // Initialize an array to store the data
+    protected $data = [];
 
     public function collection(Collection $rows)
     {
         foreach ($rows as $row) {
-            // Add each row to the data array
             $this->data[] = [
-                'het'           => $row[0],
-                'id_part_no'    => $row[1],
+                'part_no'=> $row[0],
+                'het'    => $row[1],
             ];
         }
     }

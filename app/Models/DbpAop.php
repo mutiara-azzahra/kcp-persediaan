@@ -9,9 +9,14 @@ class DbpAop extends Model
 {
     use HasFactory;
 
-    protected $table = 'part_aop_modal_test';
+    protected $table = 'part_aop_modal';
     protected $primaryKey = 'id';
     public $timestamps = false;
+
+    protected $fillable = [
+        'het',
+        'modi_date'
+    ];
 
     public function part_no()
     {

@@ -6,7 +6,8 @@ use Illuminate\Http\Request;
 
 use Carbon\Carbon;
 
-use App\Models\PartAOPModal;
+use App\Models\DbpAop;
+use App\Models\InitMasterPart;
 use App\Imports\ExcelImport;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -14,9 +15,7 @@ class UploadDBPController extends Controller
 {
     public function index()
     {
-        $test = PartAOPModal::all();
-
-        return view('upload-dbp.index', compact('test'));
+        return view('upload-dbp.index');
     }
 
     public function uploadDbp(Request $request)
@@ -33,7 +32,7 @@ class UploadDBPController extends Controller
 
             foreach ($data as $row) {
 
-            $inserted = PartAOPModal::where('id_part_no', $row['id_part_no'])
+            $inserted = DbpAop::where('part_no', $row['part_no'])
                 ->update([
                     'het' => $row['het'],
                     'modi_date' => $now

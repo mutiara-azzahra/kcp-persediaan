@@ -9,7 +9,7 @@ class InitMasterPart extends Model
 {
     use HasFactory;
 
-    protected $table = 'mst_init_fifo';
+    protected $table = 'mst_init';
     protected $primaryKey = 'id';
     public $timestamps = false;
 
