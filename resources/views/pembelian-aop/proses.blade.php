@@ -96,6 +96,7 @@
                                     <td class="text-right">{{ number_format($p->persediaan_akhir, 0, ',', '.') }}</td>
                                 </tr>
                                 @endforeach
+                                
                             </tbody>
                         </table>
                 </div>

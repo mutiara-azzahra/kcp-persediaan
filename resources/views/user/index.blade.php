@@ -7,7 +7,9 @@
              <div class="float-left">
                 <h4><b>User</b></h4>
             </div>
-
+            <div class="float-right">
+                <a class="btn btn-success" href="{{ route('user.create') }}"><i class="fas fa-plus"></i> Tambah User</a>
+            </div>
         </div>
     </div>
         @if ($errors->any())
@@ -29,15 +31,27 @@
                             <thead>
                                 <tr>
                                     <th class="text-center">No</th>
-                                    <th class="text-center">Part No</th>
-                                    <th class="text-center">DBP</th>
+                                    <th class="text-center">Nama</th>
+                                    <th class="text-center">Username</th>
+                                    <th class="text-center">Email</th>
+                                    <th class="text-center">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
 
                                 @php
                                 $no=1;
-                                @endphp        
+                                @endphp     
+                                
+                                @foreach($user as $p)
+                                <tr>
+                                    <td>{{ $no++ }}</td>
+                                    <td>{{ $p->nama_user }}</td>
+                                    <td>{{ $p->username }}</td>
+                                    <td>{{ $p->email }}</td>
+                                    <td></td>
+                                </tr>
+                                @endforeach
                                 
                             </tbody>
                         </table>

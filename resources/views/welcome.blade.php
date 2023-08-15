@@ -102,6 +102,11 @@
                 </a>
             </li> --}}
             <li class="nav-item">
+                <a href="{{ route('user.index')}}" class="nav-link">
+                  <p>User</p>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a href="{{ route('dbp.index')}}" class="nav-link">
                   <p>Upload DBP</p>
                 </a>
@@ -109,6 +114,11 @@
             <li class="nav-item">
                 <a href="{{ route('pembelian-aop.proses')}}" class="nav-link">
                   <p>Persediaan AOP</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <p>Logout</p>
                 </a>
             </li>
         </ul>

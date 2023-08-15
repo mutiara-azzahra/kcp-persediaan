@@ -4,11 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+
 class UserController extends Controller
 {
     public function index(){
 
-        return view('user.index');
+        $user = User::all();
+
+        return view('user.index', compact('user'));
 
     }
 
@@ -18,18 +23,26 @@ class UserController extends Controller
         
     }
 
-    public function store(){
+    public function store(Request $request){
 
-        
-        
-    }
-    public function registerStore(Request $request){
+        $request -> validate([
+            'nama_user'     => 'required',
+            'username'      => 'required',
+            'email'         => 'required',
+            'password'      => 'required',
+        ]);
+    
+        $input = $request->all();
 
-        $input['nama_user']         = $request->nama_kepala_keluarga;
+        $input['nama_user']         = $request->nama_user;
+        $input['username']          = $request->username;
+        $input['email']             = $request->email;
         $input['password']          = Hash::make($request['password']);
-        $input['id_role']           = 2;
+
         $user                       = User::create($input);
 
-        return redirect('login')->with('success','Silahkan lanjutkan login!');
+        return redirect()->route('user.index')->with('success','Akun baru selesai ditambahkan!');
+        
     }
+
 }

@@ -37,34 +37,33 @@
                 </div>
                 @endif
 
-            <form action="{{ route('login.auth') }}" method="POST">
+            <form action="" method="POST">
             @csrf
             <input type="hidden" name="_method" value="POST">
                 <div class="input-group mb-3">
-                <input type="text" name="username" class="form-control" id="username" placeholder="username">
-                <div class="input-group-append">
-                    <div class="input-group-text">
-                    <span class="fas fa-envelope"></span>
+                    <input type="text" name="username" class="form-control" id="username" placeholder="username">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                        <span class="fas fa-envelope"></span>
+                        </div>
                     </div>
-                </div>
                 </div>
                 <div class="input-group mb-3">
-                <input type="password" name="password" class="form-control" id="password" placeholder="password">
-                <div class="input-group-append">
-                    <div class="input-group-text">
-                    <span class="fas fa-lock"></span>
+                    <input type="password" name="password" class="form-control" id="password" placeholder="password">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                        <span class="fas fa-lock"></span>
+                        </div>
                     </div>
-                </div>
                 </div>
                 <div class="row">
-
-                <!-- /.col -->
-                <div class="col-4">
-                    <div class="button justify-content-center">
-                    <button type="submit" class="btn btn-primary mx-auto d-block mt-2" style="width: 300px">Masuk</button>
+                    <!-- /.col -->
+                    <div class="col-4">
+                        <div class="button justify-content-center">
+                        <button type="submit" class="btn btn-primary mx-auto d-block mt-2">Masuk</button>
+                        </div>
                     </div>
-                </div>
-                <!-- /.col -->
+                    <!-- /.col -->
                 </div>
             </form>
 

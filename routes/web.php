@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PembelianAOPController;
 use App\Http\Controllers\UploadDBPController;
@@ -35,5 +36,9 @@ Route::post('/upload-dbp', [UploadDBPController::class, 'uploadDbp'])->name('upl
 
 Route::get('/dbp', [DBPController::class, 'index'])->name('dbp.index');
 Route::post('/dbp', [DBPController::class, 'upload'])->name('dbp.upload');
+
+Route::get('/user', [UserController::class, 'index'])->name('user.index');
+Route::get('/create', [UserController::class, 'create'])->name('user.create');
+Route::post('/create', [UserController::class, 'store'])->name('user.store');
 
 
