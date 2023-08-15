@@ -37,6 +37,8 @@ class PembelianAOPController extends Controller
     public function prosesPersediaan(Request $request){
 
         $tanggal_awal   = $request->input('tanggal_awal');
+
+        //if tanggal akhir <1 bulan
         $tanggal_akhir  = $request->input('tanggal_akhir');
         $kd             = $request->input('area_inv');
         $aop            = 1;
@@ -63,6 +65,7 @@ class PembelianAOPController extends Controller
             $total_init += $init;
         }
 
+
         //PEMBELIAN AOP (/1.11)
         $getPembelianAOP = InvoiceAOPHeader::where('kd_gudang', $kode->kode_gudang)
             ->whereBetween('billingDocument_date', [$tanggal_awal, $tanggal_akhir])
@@ -74,15 +77,17 @@ class PembelianAOPController extends Controller
             $invoice_details = $p->details;
 
             foreach($invoice_details as $h){
-                if (
-                    isset($h->qty, $h->dbp_jual->dbp) &&
-                    is_numeric($h->qty) && is_numeric($h->dbp_jual->dbp)
-                ) {
-                    $dbp = $h->qty * $h->dbp_jual->dbp;
-                    $dbp_pembelian += $dbp;
-                }
-            }
 
+                if (
+                    isset($h->qty, $h->dbp->het, $h->master->level->diskon) &&
+                    is_numeric($h->qty) && is_numeric($h->dbp->het) && is_numeric($h->master->level->diskon)
+                ) {
+                    $dbp = $h->qty * ($h->dbp->het * (100 - $h->master->level->diskon)/100) / 1.11;
+                    $dbp_pembelian += $dbp;
+
+                }
+
+            }
         }
 
         //RETUR AOP
@@ -101,12 +106,23 @@ class PembelianAOPController extends Controller
             ->whereIn('part_no', $part_aop)
             ->get();
 
-        //PENJUALAN DBP_JUAL
         $penjualan = 0;
+        
+        foreach($getPenjualan as $p){
+
+            $kurang_disc_ppn = $p->qty * ($p->master->dbp->het * ((100 - $p->master->level->diskon)/100) /1.11);
+
+            $penjualan += $kurang_disc_ppn;
+
+        }
+
+        //PENJUALAN OPSI 2
+
+        $penjualan_1 = 0;
 
         foreach($getPenjualan as $p) {
-            $penjualan_dbp = $p->qty * $p->dbp_jual->dbp;
-            $penjualan += $penjualan_dbp;
+            $penjualan_dbp = $p->qty * $p->dbp_jual->het;
+            $penjualan_1 += $penjualan_dbp;
 
         }
 
@@ -131,70 +147,66 @@ class PembelianAOPController extends Controller
 
         $getPersediaanAkhirPrev = NilaiPersediaan::where('bulan', $bulan_prev)->where('area_inv', $kd)->pluck('persediaan_akhir')->first();       
 
-        // if ($checkData === null) {
-
-        //     //init Januari 2023
-        //     $data['tanggal_awal']           = $tanggal_awal;
-        //     $data['tanggal_akhir']          = $tanggal_akhir;
-        //     $data['bulan']                  = $bulan;
-        //     $data['tahun']                  = $tahun;
-        //     $data['area_inv']               = $kd;
-        //     $data['persediaan_awal']        = $total_init;
-        //     $data['pembelian']              = $dbp_pembelian;
-        //     $data['retur_aop']              = $retur_aop;
-        //     $data['modal_terjual']          = $penjualan;
-        //     $data['retur_modal_terjual']    = $total_retur;
-        //     $data['persediaan_akhir']       = $total_init + $dbp_pembelian - $retur_aop - $penjualan + $total_retur ;
-        //     $data['status']                 = 'Y';
-        //     $data['crea_date']              = Carbon::now();
-
-        //     //dd($data);
-        //     $inserted = NilaiPersediaan::create($data);
-
-        //     if ($inserted) {
-        //         return redirect()->route('pembelian-aop.proses')->with('success', 'Data persediaan berhasil ditambahkan.');
-
-        //     } else {
-        //         return redirect()->route('pembelian-aop.proses')->with('danger', 'Data persediaan gagal ditambahkan.');
-        //     }
-        // }  
-        // elseif ($checkData !== null) {
-
-        //     return redirect()->route('pembelian-aop.proses')->with('warning','Data persediaan sudah tersedia!');
-
-        // }
-
         if ($checkData === null) {
-            //Next Bulan
-            $data['tanggal_awal']           = $tanggal_awal;
-            $data['tanggal_akhir']          = $tanggal_akhir;
+
+            //init Januari 2023
             $data['bulan']                  = $bulan;
             $data['tahun']                  = $tahun;
             $data['area_inv']               = $kd;
-            $data['persediaan_awal']        = $getPersediaanAkhirPrev;
+            $data['persediaan_awal']        = $total_init;
             $data['pembelian']              = $dbp_pembelian;
             $data['retur_aop']              = $retur_aop;
             $data['modal_terjual']          = $penjualan;
             $data['retur_modal_terjual']    = $total_retur;
-            $data['persediaan_akhir']       = $getPersediaanAkhirPrev + $dbp_pembelian - $retur_aop - $penjualan + $total_retur ;
+            $data['persediaan_akhir']       = $total_init + $dbp_pembelian - $retur_aop - $penjualan + $total_retur ;
             $data['status']                 = 'Y';
             $data['crea_date']              = Carbon::now();
-  
-            //dd($data);
-            $inserted = NilaiPersediaan::create($data);
+
+            dd($data);
+            //$inserted = NilaiPersediaan::create($data);
 
             if ($inserted) {
-                return redirect()->route('pembelian-aop.proses')->with('success', 'Data persediaan berhasil ditambahkan!');
+                return redirect()->route('pembelian-aop.proses')->with('success', 'Data persediaan berhasil ditambahkan.');
 
             } else {
-                return redirect()->route('pembelian-aop.proses')->with('danger', 'Data persediaan gagal ditambahkan!');
+                return redirect()->route('pembelian-aop.proses')->with('danger', 'Data persediaan gagal ditambahkan.');
             }
-        } 
+        }  
         elseif ($checkData !== null) {
 
             return redirect()->route('pembelian-aop.proses')->with('warning','Data persediaan sudah tersedia!');
 
         }
+
+    //     if ($checkData === null) {
+    //         //Next Bulan
+    //         $data['bulan']                  = $bulan;
+    //         $data['tahun']                  = $tahun;
+    //         $data['area_inv']               = $kd;
+    //         $data['persediaan_awal']        = $getPersediaanAkhirPrev;
+    //         $data['pembelian']              = $dbp_pembelian;
+    //         $data['retur_aop']              = $retur_aop;
+    //         $data['modal_terjual']          = $penjualan;
+    //         $data['retur_modal_terjual']    = $total_retur;
+    //         $data['persediaan_akhir']       = $getPersediaanAkhirPrev + $dbp_pembelian - $retur_aop - $penjualan + $total_retur ;
+    //         $data['status']                 = 'Y';
+    //         $data['crea_date']              = Carbon::now();
+  
+    //         //dd($data);
+    //         //$inserted = NilaiPersediaan::create($data);
+
+    //         if ($inserted) {
+    //             return redirect()->route('pembelian-aop.proses')->with('success', 'Data persediaan berhasil ditambahkan!');
+
+    //         } else {
+    //             return redirect()->route('pembelian-aop.proses')->with('danger', 'Data persediaan gagal ditambahkan!');
+    //         }
+    //     } 
+    //     elseif ($checkData !== null) {
+
+    //         return redirect()->route('pembelian-aop.proses')->with('warning','Data persediaan sudah tersedia!');
+
+    //     }
             
      }
 

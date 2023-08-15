@@ -18,9 +18,5 @@ class PartAOPDbp extends Model
     {
         return $this->hasMany(TransaksiInvoiceDetails::class, 'part_no', 'part_no');
     }
-
-    public function details()
-    {
-        return $this->hasMany(InvoiceAOPDetails::class, 'part_no', 'part_no');
-    }
+    
 }

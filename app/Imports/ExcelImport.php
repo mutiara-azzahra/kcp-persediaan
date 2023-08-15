@@ -13,8 +13,8 @@ class ExcelImport implements ToCollection
     {
         foreach ($rows as $row) {
             $this->data[] = [
-                'part_no'=> $row[0],
-                'het'    => $row[1],
+                'part_no'   => $row[0],
+                'dbp'       => $row[1],
             ];
         }
     }

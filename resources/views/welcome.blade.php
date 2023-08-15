@@ -96,8 +96,13 @@
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <a href="{{ route('upload-dbp.index')}}" class="nav-link">
+                  <p>Upload DBP</p>
+                </a>
+            </li> --}}
+            <li class="nav-item">
+                <a href="{{ route('dbp.index')}}" class="nav-link">
                   <p>Upload DBP</p>
                 </a>
             </li>

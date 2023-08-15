@@ -14,6 +14,8 @@ class NilaiPersediaan extends Model
     public $timestamps = false;
 
     protected $fillable =[
+        'tanggal_awal',
+        'tanggal_akhir',
         'bulan',
         'tahun',
         'area_inv',
