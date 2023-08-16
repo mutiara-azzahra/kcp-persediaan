@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Middleware\Auth;
+
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PembelianAOPController;
@@ -19,13 +21,19 @@ use App\Http\Controllers\DBPController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/dashboard', function () {
+        return view('welcome');
+    })->name('dashboard');
 });
+
+
 
 Route::get('/login', [LoginController::class, 'formLogin'])->name('login.formLogin');
 Route::post('/login', [LoginController::class, 'login'])->name('login.login');
 Route::get('/register', [LoginController::class, 'formRegister'])->name('login.formRegister');
+
+Route::get('/logout', [LogoutController::class, 'logout'])->name('logout');
 
 Route::get('/pembelian-aop', [PembelianAOPController::class, 'index'])->name('pembelian-aop.index');
 Route::get('/pembelian-aop/proses', [PembelianAOPController::class, 'proses'])->name('pembelian-aop.proses');
