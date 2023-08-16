@@ -13,6 +13,9 @@
                 <div class="alert alert-success">
                     <p>{{ $message }}</p>
                 </div>
+                <button type="button" class="btn btn-tool" data-card-widget="remove">
+                    <i class="fas fa-times"></i>
+                </button>
             @endif
 
             <div class="card" style="padding: 10px;">

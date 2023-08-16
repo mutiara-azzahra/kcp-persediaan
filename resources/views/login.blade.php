@@ -17,7 +17,7 @@
 <body class="hold-transition login-page">
     <div class="login-box">
         <div class="login-logo">
-            <a href="#"><b>KCP</b>Persediaan</a>
+            <a href="#"><b>KCP</b> Persediaan</a>
         </div>
 
         <div class="card">
@@ -58,7 +58,7 @@
                 </div>
                 <div class="row">
                     <!-- /.col -->
-                    <div class="col-4">
+                    <div class="col-md-12">
                         <div class="button justify-content-center">
                         <button type="submit" class="btn btn-primary mx-auto d-block mt-2">Masuk</button>
                         </div>
