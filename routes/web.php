@@ -6,6 +6,7 @@ use App\Http\Middleware\Auth;
 
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\PembelianAOPController;
 use App\Http\Controllers\UploadDBPController;
 use App\Http\Controllers\DBPController;
@@ -27,10 +28,8 @@ Route::group(['middleware' => 'auth'], function () {
     })->name('dashboard');
 });
 
-
-
 Route::get('/login', [LoginController::class, 'formLogin'])->name('login.formLogin');
-Route::post('/login', [LoginController::class, 'login'])->name('login.login');
+Route::post('/login', [LoginController::class, 'login'])->name('login');
 Route::get('/register', [LoginController::class, 'formRegister'])->name('login.formRegister');
 
 Route::get('/logout', [LogoutController::class, 'logout'])->name('logout');
