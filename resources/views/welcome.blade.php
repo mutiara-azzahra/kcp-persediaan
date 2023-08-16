@@ -88,7 +88,7 @@
             <img src="{{ asset('dist/img/user2-160x160.jpg')}} " class="img-circle elevation-2" alt="User Image">
           </div>
           <div class="info">
-            <a href="#" class="d-block">Halo, User!</a>
+            <a href="{{ route('dashboard')}}" class="d-block">Halo, {{ Auth::user()->nama_user}} !</a>
           </div>
         </div>
 
@@ -114,6 +114,11 @@
               <li class="nav-item">
                   <a href="{{ route('pembelian-aop.proses')}}" class="nav-link">
                     <p>Persediaan AOP</p>
+                  </a>
+              </li>
+              <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <p>Persediaan Non AOP</p>
                   </a>
               </li>
               <li class="nav-item">

@@ -24,51 +24,55 @@
             <div class="card-body login-card-body">
                 @if ($message = Session::get('success'))
                 <div class="alert alert-success mt-3">
-                <div class="row">
-                    <i class="fas fa-info-circle p-1"></i><p>{{ $message }}</p>            
-                </div>
+                    <div class="row">
+                        <i class="fas fa-info-circle p-1"></i><p>{{ $message }}</p>            
+                    </div>
                 </div>
                 @elseif ($message = Session::get('danger'))
                 <div class="alert alert-danger mt-3">
-                <div class="row">
-                    <i class="fas fa-info-circle p-1"></i><p>{{ $message }}</p>           
-                </div>
-
+                    <div class="row">
+                        <i class="fas fa-info-circle p-1"></i><p>{{ $message }}</p>      
+                    </div>
                 </div>
                 @endif
 
-            <form action="" method="POST">
-            @csrf
-            <input type="hidden" name="_method" value="POST">
-                <div class="input-group mb-3">
-                    <input type="text" name="username" class="form-control" id="username" placeholder="username">
-                    <div class="input-group-append">
-                        <div class="input-group-text">
-                        <span class="fas fa-envelope"></span>
+                <form action="" method="POST">
+                @csrf
+                <input type="hidden" name="_method" value="POST">
+                    <div class="input-group mb-3">
+                        <input type="text" name="username" class="form-control" id="username" placeholder="username">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                            <span class="fas fa-envelope"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="input-group mb-3">
-                    <input type="password" name="password" class="form-control" id="password" placeholder="password">
-                    <div class="input-group-append">
-                        <div class="input-group-text">
-                        <span class="fas fa-lock"></span>
+                    <div class="input-group mb-3">
+                        <input type="password" name="password" class="form-control" id="password" placeholder="password">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                            <span class="fas fa-lock"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <!-- /.col -->
-                    <div class="col-md-12">
-                        <div class="button justify-content-center">
-                        <button type="submit" class="btn btn-primary mx-auto d-block mt-2">Masuk</button>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="button justify-content-center">
+                            <button type="submit" class="btn btn-primary mx-auto d-block mt-2">Masuk</button>
+                            </div>
                         </div>
                     </div>
-                    <!-- /.col -->
-                </div>
-            </form>
+                </form>
 
             </div>
         </div>
+
+                <div class="text-center pt-5">
+                    Jl. Sutoyo.S No. 144 RT. 36 RW. 03<br>
+                    Telp. (0511) 4417127, 4416579<br>
+                    Fax. (0511) 3364674<br>
+                    Banjarmasin, Kalimantan Selatan<br>
+                </div>
     </div>
 
 <!-- jQuery -->
