@@ -8,6 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\PembelianAOPController;
+use App\Http\Controllers\PembelianNonController;
 use App\Http\Controllers\UploadDBPController;
 use App\Http\Controllers\DBPController;
 
@@ -40,9 +41,14 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/user', [UserController::class, 'index'])->name('user.index');
     Route::get('/create', [UserController::class, 'create'])->name('user.create');
     Route::post('/create', [UserController::class, 'store'])->name('user.store');
+
+    Route::get('/non-aop', [PembelianNonController::class, 'index'])->name('non-aop.index');
+    Route::get('/non-aop/prosesPersediaan', [PembelianNonController::class, 'prosesPersediaan'])->name('non-aop.prosesPersediaan');
+
 });
 
 Route::get('/login', [LoginController::class, 'formLogin'])->name('login.formLogin');
+//Route::get('/login', [LoginController::class, 'formLogin'])->middleware('guest')->name('login.formLogin');
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 Route::get('/register', [LoginController::class, 'formRegister'])->name('login.formRegister');
 

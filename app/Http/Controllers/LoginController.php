@@ -5,11 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
+
 
 class LoginController extends Controller
 {
+
     public function formLogin(){
 
+        if (Auth::check()) {
+            return redirect()->route('dashboard');
+        }
         return view('login');
     }
 
