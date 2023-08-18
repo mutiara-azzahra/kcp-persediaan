@@ -44,6 +44,7 @@ class LoginController extends Controller
             $request -> validate([
                 'nama_user'     => 'required',
                 'username'      => 'required',
+                'password'      => 'required',
             ]);
     
             $input = $request->all();
