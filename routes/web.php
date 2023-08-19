@@ -29,7 +29,6 @@ Route::group(['middleware' => 'auth'], function () {
     })->name('dashboard');
 
     Route::get('/pembelian-aop', [PembelianAOPController::class, 'index'])->name('pembelian-aop.index');
-    Route::get('/pembelian-aop/proses', [PembelianAOPController::class, 'proses'])->name('pembelian-aop.proses');
     Route::get('/pembelian-aop/prosesPersediaan', [PembelianAOPController::class, 'prosesPersediaan'])->name('pembelian-aop.prosesPersediaan');
 
     Route::get('/upload-dbp', [UploadDBPController::class, 'index'])->name('upload-dbp.index');

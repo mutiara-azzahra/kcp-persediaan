@@ -5,7 +5,7 @@
     <div class="row mt-5">
         <div class="col-lg-12 pb-3">
              <div class="float-left">
-                <h4><b>Proses Persediaan</b></h4>
+                <h4><b>Proses Persediaan Non AOP</b></h4>
             </div>
         </div>
     </div>
@@ -30,7 +30,7 @@
 
         <div class="card" style="padding: 10px;">
             <div class="card-body">
-                        <form action="{{ route('pembelian-aop.prosesPersediaan') }}"  method="GET">
+                        <form action="{{ route('non-aop.prosesPersediaan') }}"  method="GET">
                             @csrf
                             <div class="row">
                                 <div class="form-group col-4">

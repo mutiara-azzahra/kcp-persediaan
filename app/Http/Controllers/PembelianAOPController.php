@@ -22,16 +22,12 @@ use App\Models\SuratTagihan;
 
 class PembelianAOPController extends Controller
 {
-    public function index(){
-
-        return view('pembelian-aop.index');
-    }
     
-    public function proses(){
+    public function index(){
 
         $persediaan = NilaiPersediaan::all();
 
-        return view('pembelian-aop.proses', compact('persediaan'));
+        return view('pembelian-aop.index', compact('persediaan'));
     }
 
     public function prosesPersediaan(Request $request){
@@ -184,15 +180,15 @@ class PembelianAOPController extends Controller
             $inserted = NilaiPersediaan::create($data);
 
             if ($inserted) {
-                return redirect()->route('pembelian-aop.proses')->with('success', 'Data persediaan berhasil ditambahkan!');
+                return redirect()->route('pembelian-aop.index')->with('success', 'Data persediaan berhasil ditambahkan!');
 
             } else {
-                return redirect()->route('pembelian-aop.proses')->with('danger', 'Data persediaan gagal ditambahkan!');
+                return redirect()->route('pembelian-aop.index')->with('danger', 'Data persediaan gagal ditambahkan!');
             }
         } 
         elseif ($checkData !== null) {
 
-            return redirect()->route('pembelian-aop.proses')->with('warning','Data persediaan sudah tersedia!');
+            return redirect()->route('pembelian-aop.index')->with('warning','Data persediaan sudah tersedia!');
 
         }
             
