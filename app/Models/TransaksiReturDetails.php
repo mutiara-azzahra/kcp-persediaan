@@ -16,6 +16,6 @@ class TransaksiReturDetails extends Model
 
     public function header_retur()
     {
-        return $this->hasOne(TransaksiReturHeader::class, 'noinv', 'noinv');
+        return $this->belongsTo(TransaksiReturHeader::class, 'noretur');
     }
 }

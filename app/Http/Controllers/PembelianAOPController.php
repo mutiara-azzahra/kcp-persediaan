@@ -107,17 +107,22 @@ class PembelianAOPController extends Controller
         }
 
         //RETUR PENJUALAN
-        $getReturPenjualan = TransaksiReturHeader::whereBetween('flag_approve1_date', [$tanggal_awal, $tanggal_akhir])
-            ->where('area_retur', $kode->kode_area)
+        $getReturPenjualan = TransaksiReturHeader::where('area_retur', $kode->kode_area)
+            ->whereBetween('flag_approve1_date', [$tanggal_awal, $tanggal_akhir])
             ->where('flag_approve1', 'Y')
             ->get();
 
         $total_retur = 0;
 
         foreach ($getReturPenjualan as $r) {
-
-            $total_retur += $r->details_retur->nominal_total/1.11;
+            
+            $total_retur = $r->details_retur;
+            var_dump($r);
+           
         }
+
+
+        //dd($total_retur);
 
         //INSERT KE TABEL NILAI PERSEDIAAN
         $checkData = NilaiPersediaan::where('bulan', $bulan)

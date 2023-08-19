@@ -12,6 +12,7 @@ use App\Models\PartNonDetails;
 use App\Models\PartAOPMaster;
 use App\Models\NilaiPersediaanNon;
 use App\Models\TransaksiInvoiceDetails;
+use App\Models\TransaksiReturHeader;
 
 class PembelianNonController extends Controller
 {
@@ -29,6 +30,7 @@ class PembelianNonController extends Controller
         $tanggal_akhir  = $request->input('tanggal_akhir');
         $kd             = $request->input('area_inv');
         $aop            = 2;
+
 
         //PILIH PERSEDIAAN
         $tanggal = new Carbon($tanggal_awal);
@@ -54,19 +56,15 @@ class PembelianNonController extends Controller
 
         }
 
-        //dd($total_harga);
-
         //penjualan non aop
 
         $part_non = PartAOPMaster::where('id_part', $aop)->pluck('part_no');
-
-        //dd($part_non);
 
         $getPenjualanNon = TransaksiInvoiceDetails::where('area_inv', $kode->kode_area)
             ->whereBetween('crea_date', [$tanggal_awal, $tanggal_akhir])
             ->whereIn('part_no', $part_non)
             ->get();
-        // dd($getPenjualanNon);
+      
 
         //PENJUALAN DBP_JUAL_NON
         $penjualan_non = 0;
@@ -77,9 +75,27 @@ class PembelianNonController extends Controller
 
         }
 
-        dd($penjualan_non);
+        //RETUR TOKO NON
 
-        return redirect()->route('pembelian-aop.index')->with('success', 'Data persediaan berhasil ditambahkan!');
+        $getReturNon = TransaksiReturHeader::whereBetween('flag_approve1_date', [$tanggal_awal, $tanggal_akhir])
+            ->where('area_retur', $kode->kode_area)
+            ->where('flag_approve1', 'Y')
+            ->get();
+
+        $sum_total_retur = 0;
+
+        foreach($getReturNon as $r){
+            $retur = $r->details_retur->whereIn('part_no', $part_non)->get();
+
+            foreach($retur as $n){
+                $total_retur = $n->nominal_total;
+                $sum_total_retur += $total_retur/1.11;
+            }
+        }
+
+        
+
+        return redirect()->route('non-aop.index')->with('success', 'Data persediaan berhasil ditambahkan!');
     }
 
 }
