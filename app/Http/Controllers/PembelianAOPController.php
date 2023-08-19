@@ -116,13 +116,14 @@ class PembelianAOPController extends Controller
 
         foreach ($getReturPenjualan as $r) {
             
-            $total_retur = $r->details_retur;
-            var_dump($r);
+            $retur = $r->details_retur->whereIn('part_no', $part_non)->get();
+
+            foreach($retur as $n){
+                $total_retur = $n->nominal_total;
+                $sum_total_retur += $total_retur/1.11;
+            }
            
         }
-
-
-        //dd($total_retur);
 
         //INSERT KE TABEL NILAI PERSEDIAAN
         $checkData = NilaiPersediaan::where('bulan', $bulan)
