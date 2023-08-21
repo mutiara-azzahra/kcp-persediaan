@@ -85,15 +85,16 @@ class PembelianNonController extends Controller
         $sum_total_retur = 0;
 
         foreach($getReturNon as $r){
-            $retur = $r->details_retur->whereIn('part_no', $part_non)->get();
+            $retur = $r->details_retur->whereIn('part_no', $part_non);
 
             foreach($retur as $n){
-                $total_retur = $n->nominal_total;
-                $sum_total_retur += $total_retur/1.11;
+                if (isset($n->nominal_total) && is_numeric($n->nominal_total))
+                {
+                    $total_retur = $n->nominal_total;
+                    $sum_total_retur += $total_retur;
+                }                
             }
         }
-
-        
 
         return redirect()->route('non-aop.index')->with('success', 'Data persediaan berhasil ditambahkan!');
     }

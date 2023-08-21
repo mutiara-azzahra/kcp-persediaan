@@ -112,17 +112,18 @@ class PembelianAOPController extends Controller
             ->where('flag_approve1', 'Y')
             ->get();
 
-        $total_retur = 0;
+        $sum_total_retur = 0;
 
-        foreach ($getReturPenjualan as $r) {
-            
-            $retur = $r->details_retur->whereIn('part_no', $part_non)->get();
+        foreach($getReturPenjualan as $r){
+            $retur = $r->details_retur->whereIn('part_no', $part_aop);
 
             foreach($retur as $n){
-                $total_retur = $n->nominal_total;
-                $sum_total_retur += $total_retur/1.11;
-            }
-           
+                if (isset($n->nominal_total) && is_numeric($n->nominal_total))
+                {
+                    $total_retur = $n->nominal_total;
+                    $sum_total_retur += $total_retur;
+                }                
+            } 
         }
 
         //INSERT KE TABEL NILAI PERSEDIAAN
