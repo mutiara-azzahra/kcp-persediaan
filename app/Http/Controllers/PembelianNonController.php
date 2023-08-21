@@ -82,7 +82,7 @@ class PembelianNonController extends Controller
             ->where('flag_approve1', 'Y')
             ->get();
 
-        $sum_total_retur = 0;
+        $retur_aop = 0;
 
         foreach($getReturNon as $r){
             $retur = $r->details_retur->whereIn('part_no', $part_non);
@@ -91,7 +91,7 @@ class PembelianNonController extends Controller
                 if (isset($n->nominal_total) && is_numeric($n->nominal_total))
                 {
                     $total_retur = $n->nominal_total;
-                    $sum_total_retur += $total_retur;
+                    $retur_aop += $total_retur;
                 }                
             }
         }
