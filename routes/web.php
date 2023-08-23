@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Middleware\Auth;
 
+use App\Http\Controllers\AkunPersediaanController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
@@ -43,6 +44,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/non-aop', [PembelianNonController::class, 'index'])->name('non-aop.index');
     Route::get('/non-aop/prosesPersediaan', [PembelianNonController::class, 'prosesPersediaan'])->name('non-aop.prosesPersediaan');
+
+    Route::get('/akun-persediaan', [AkunPersediaanController::class, 'index'])->name('akun-persediaan.index');
+    Route::post('/akun-persediaan/store', [AkunPersediaanController::class, 'store'])->name('akun-persediaan.store');
 
 });
 

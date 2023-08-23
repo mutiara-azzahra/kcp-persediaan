@@ -123,10 +123,41 @@
                   </a>
               </li>
               <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <p>
+                    Akun Persediaan AOP
+                    <i class="right fas fa-angle-left"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="{{ route('akun-persediaan.index')}}" class="nav-link">
+                      <p>Pembelian AOP</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="#" class="nav-link">
+                      <p>Penjualan AOP</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="#" class="nav-link">
+                      <p>Mutasi AOP</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="#" class="nav-link">
+                      <p>Retur Pembelian AOP</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li class="nav-item">
                   <a href="{{ route('logout')}}" class="nav-link">
                     <p>Logout</p>
                   </a>
               </li>
+              
           </ul>
         </nav>
         <!-- /.sidebar-menu -->
