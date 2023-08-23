@@ -203,5 +203,12 @@ class PembelianAOPController extends Controller
             
      }
 
+     public function api()
+     {
+        $nilai_persediaan = NilaiPersediaan::all();
+
+        
+     }
+
 
 }
