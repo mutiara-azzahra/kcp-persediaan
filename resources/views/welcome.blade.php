@@ -131,13 +131,13 @@
                 </a>
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
-                    <a href="{{ route('akun-persediaan.index')}}" class="nav-link">
-                      <p>Penjualan DBP</p>
+                    <a href="{{ route('akun-pembelian.index')}}" class="nav-link">
+                      <p>Pembelian AOP DBP</p>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="#" class="nav-link">
-                      <p>Penjualan AOP</p>
+                    <a href="{{ route('akun-persediaan.index')}}" class="nav-link">
+                      <p>Penjualan DBP</p>
                     </a>
                   </li>
                   <li class="nav-item">

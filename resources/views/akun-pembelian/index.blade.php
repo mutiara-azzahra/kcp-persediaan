@@ -5,7 +5,7 @@
     <div class="row mt-5">
         <div class="col-lg-12 pb-3">
              <div class="float-left">
-                <h4><b>PENJUALAN DBP</b></h4>
+                <h4><b>PEMBELIAN AOP DBP</b></h4>
             </div>
         </div>
     </div>
@@ -17,7 +17,7 @@
 
         <div class="card" style="padding: 10px;">
             <div class="card-body">
-                        <form action="{{ route('akun-persediaan.store') }}"  method="POST">
+                        <form action="{{ route('akun-pembelian.store') }}"  method="POST">
                             @csrf
                             <div class="row">
                                 <div class="form-group col-6">
@@ -46,8 +46,7 @@
                                 <thead>
                                     <tr>
                                         <th class="text-center">No</th>
-                                        <th class="text-center">Tanggal</th>
-                                        <th class="text-center">No Invoice</th>
+                                        <th class="text-center">Invoice AOP</th>
                                         <th class="text-center">Part No</th>
                                         <th class="text-center">DBP</th>
                                     </tr>
@@ -61,10 +60,9 @@
                                     @foreach($persediaan_dbp as $p)
                                     <tr>
                                         <td>{{ $no++ }}</td>
-                                        <td class="text-left">{{ $p->crea_date }}</td>
-                                        <td class="text-left">{{ $p->noinv }}</td>
+                                        <td class="text-left">{{ $p->invoice_aop }}</td>
                                         <td class="text-left">{{ $p->part_no }}</td>
-                                        <td class="text-right">{{ number_format($p->nominal_total, 0, ',', '.') }}</td>
+                                        <td class="text-right">{{ number_format($p->amount_dbp, 0, ',', '.') }}</td>
                                     </tr>
                                     @endforeach
 

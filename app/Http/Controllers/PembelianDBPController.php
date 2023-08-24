@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+
 use Illuminate\Http\Request;
 use App\Models\PembelianDBP;
+use App\Models\InvoiceAOPHeader;
 
 class PembelianDBPController extends Controller
 {
     public function index(){
 
-        $pembelian_dbp = PembelianDBP::all();
+        $persediaan_dbp = PembelianDBP::all();
 
-        return view('akun-pembelian.index', compact('pembelian_dbp'));
+        return view('akun-pembelian.index', compact('persediaan_dbp'));
     }
 
     public function store(Request $request){
@@ -19,45 +22,49 @@ class PembelianDBPController extends Controller
         $tanggal_awal   = $request->input('tanggal_awal');
         $tanggal_akhir  = $request->input('tanggal_akhir');
         $kd             = $request->input('area_inv');
-        $aop            = 1;
         
-        $part_aop = PartAOPMaster::where('id_part', $aop)->pluck('part_no');
-        
-        $insert = TransaksiInvoiceDetails::whereBetween('crea_date', [$tanggal_awal, $tanggal_akhir])
-            ->whereIn('part_no', $part_aop)
+        $insert = InvoiceAOPHeader::whereBetween('billingDocument_date', [$tanggal_awal, $tanggal_akhir])
             ->get();
 
         $successCount = 0;
 
         foreach ($insert as $i) {
-            $data = [
-                        'id'              => $i->id,
-                        'noinv'           => $i->noinv,
-                        'area_inv'        => $i->area_inv,
-                        'kd_outlet'       => $i->kd_outlet,
-                        'part_no'         => $i->part_no,
-                        'nm_part'         => $i->nm_part,
-                        'qty'             => $i->qty,
-                        'dbp'             => $i->dbp_jual->dbp,
-                        'nominal_total'   => $i->qty * $i->dbp_jual->dbp,
-                        'status'          => $i->status,
-                        'crea_date'       => $i->crea_date,
-                        'crea_by'         => $i->crea_by,
+
+            $details_dbp = $i->details;
+            
+            foreach($details_dbp as $d){
+                $data = [
+                        'id'              => $d->id,
+                        'invoice_aop'     => $d->invoice_aop,
+                        'customer_to'     => $d->customer_to,
+                        'part_no'         => $d->part_no,
+                        'qty'             => $d->qty,
+                        'dbp'             => isset($d->dbp_jual->dbp) ? $d->dbp_jual->dbp : null,
+                        'amount_dbp'      => isset($d->dbp_jual->dbp) ? $d->qty * $d->dbp_jual->dbp : null,
+                        'no_sp_aop'       => $d->no_sp_aop,
+                        'status'          => $d->status,
+                        'ket_status'      => $d->ket_status,
+                        'filename'        => $d->filename,
+                        'crea_date'       => $d->crea_date,
+                        'crea_by'         => $d->crea_by,
                         'modi_date'       => Carbon::now(),
-                        'modi_by'         => $i->modi_by,
+                        'modi_by'         => $d->modi_by,
                     ];
 
-            $inserted = TransaksiInvoiceDetailsDbp::create($data);
+                    $inserted = PembelianDBP::create($data);
 
-            if ($inserted) {
-                $successCount++;
+                    if ($inserted) {
+                        $successCount++;
+                    }
+
             }
+            
         }
 
         if ($successCount > 0) {
-            return redirect()->route('akun-persediaan.index')->with('success', 'Data persediaan berhasil ditambahkan!');
+            return redirect()->route('akun-pembelian.index')->with('success', 'Data pembelian berhasil ditambahkan!');
         } else {
-            return redirect()->route('akun-persediaan.index')->with('danger', 'Data persediaan gagal ditambahkan!');
+            return redirect()->route('akun-pembelian.index')->with('danger', 'Data pembelian gagal ditambahkan!');
         }
         
     }
