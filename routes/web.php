@@ -12,6 +12,7 @@ use App\Http\Controllers\PembelianAOPController;
 use App\Http\Controllers\PembelianNonController;
 use App\Http\Controllers\UploadDBPController;
 use App\Http\Controllers\DBPController;
+use App\Http\Controllers\PembelianDBPController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,6 +48,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/akun-persediaan', [AkunPersediaanController::class, 'index'])->name('akun-persediaan.index');
     Route::post('/akun-persediaan/store', [AkunPersediaanController::class, 'store'])->name('akun-persediaan.store');
+
+    Route::get('/akun-pembelian', [PembelianDBPController::class, 'index'])->name('akun-pembelian.index');
+    Route::post('/akun-pembelian/store', [PembelianDBPController::class, 'store'])->name('akun-pembelian.store');
 
 });
 

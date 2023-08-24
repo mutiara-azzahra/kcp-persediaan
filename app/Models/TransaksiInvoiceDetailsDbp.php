@@ -15,6 +15,26 @@ class TransaksiInvoiceDetailsDbp extends Model
     protected $primaryKey = 'id';
     public $timestamps = false;
 
+    //id`, `noinv`, `area_inv`, `kd_outlet`, `part_no`, `nm_part`, `qty`, `dbp`, `nominal_total`,
+    // `status`, `crea_date`, `crea_by`, `modi_date`, `modi_by
+
+    protected $fillable =[
+        'id',
+        'noinv',
+        'area_inv',
+        'kd_outlet',
+        'part_no',
+        'nm_part',
+        'qty',
+        'dbp',
+        'nominal_total',
+        'status',
+        'crea_date',
+        'crea_by',
+        'modi_date',
+        'modi_by'
+    ];
+
 
     public function master()
     {

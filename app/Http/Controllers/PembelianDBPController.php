@@ -3,20 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\PembelianDBP;
 
-use Carbon\Carbon;
-
-use App\Models\TransaksiInvoiceDetails;
-use App\Models\TransaksiInvoiceDetailsDbp;
-use App\Models\PartAOPMaster;
-
-class AkunPersediaanController extends Controller
+class PembelianDBPController extends Controller
 {
     public function index(){
 
-        $persediaan_dbp = TransaksiInvoiceDetailsDbp::all();
+        $pembelian_dbp = PembelianDBP::all();
 
-        return view('akun-persediaan.index', compact('persediaan_dbp'));
+        return view('akun-pembelian.index', compact('pembelian_dbp'));
     }
 
     public function store(Request $request){

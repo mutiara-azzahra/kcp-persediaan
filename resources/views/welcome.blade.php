@@ -125,14 +125,14 @@
               <li class="nav-item">
                 <a href="#" class="nav-link">
                   <p>
-                    Akun Persediaan AOP
+                    Akun Persediaan
                     <i class="right fas fa-angle-left"></i>
                   </p>
                 </a>
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
                     <a href="{{ route('akun-persediaan.index')}}" class="nav-link">
-                      <p>Pembelian AOP</p>
+                      <p>Penjualan DBP</p>
                     </a>
                   </li>
                   <li class="nav-item">
