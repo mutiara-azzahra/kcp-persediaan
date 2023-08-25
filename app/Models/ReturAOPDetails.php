@@ -12,4 +12,6 @@ class ReturAOPDetails extends Model
     protected $table = 'retur_aop_details';
     protected $primaryKey = 'id';
     public $timestamps = false;
+
+    
 }

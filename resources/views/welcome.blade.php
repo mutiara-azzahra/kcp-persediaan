@@ -140,16 +140,6 @@
                       <p>Penjualan DBP</p>
                     </a>
                   </li>
-                  <li class="nav-item">
-                    <a href="#" class="nav-link">
-                      <p>Mutasi AOP</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="#" class="nav-link">
-                      <p>Retur Pembelian AOP</p>
-                    </a>
-                  </li>
                 </ul>
               </li>
               <li class="nav-item">

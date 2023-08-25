@@ -15,9 +15,6 @@ class TransaksiInvoiceDetailsDbp extends Model
     protected $primaryKey = 'id';
     public $timestamps = false;
 
-    //id`, `noinv`, `area_inv`, `kd_outlet`, `part_no`, `nm_part`, `qty`, `dbp`, `nominal_total`,
-    // `status`, `crea_date`, `crea_by`, `modi_date`, `modi_by
-
     protected $fillable =[
         'id',
         'noinv',
@@ -45,4 +42,5 @@ class TransaksiInvoiceDetailsDbp extends Model
     {
         return $this->belongsTo(PartAOPDbp::class, 'part_no', 'part_no');
     }
+
 }

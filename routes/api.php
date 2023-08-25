@@ -2,7 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\api\NilaiPersediaanController;
+use App\Http\Controllers\api\AkunPembelianController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,3 +23,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::apiResource('nilai_persediaan', NilaiPersediaanController::class);
+Route::apiResource('akun_pembelian', AkunPembelianController::class);
