@@ -84,7 +84,7 @@ class PembelianAOPController extends Controller
         //RETUR AOP
         $getReturAOP = ReturAOPHeader::whereBetween('crea_date', [$tanggal_awal, $tanggal_akhir])
             ->where('kd_gudang_aop', $kode->kode_kcp)
-            ->where('approve_aop', 'Y')
+            ->where('approve_aop', 'Y') 
             ->get();
 
         $retur_aop = $getReturAOP->sum('amount_total');
@@ -115,18 +115,14 @@ class PembelianAOPController extends Controller
         $sum_total_retur = 0;
 
         foreach($getReturPenjualan as $r){
-            $retur = $r->details_retur->whereIn('part_no', $part_aop);
+            $retur = $r->details_retur;
 
             foreach($retur as $n){
-                if (isset($n->nominal_total) && is_numeric($n->nominal_total))
-                {
-                    $total_retur = $n->nominal_total;
-                    
-                }                
-            } 
-            $sum_total_retur += $total_retur/1.11;
+                $total_retur = $n->nominal_total; 
+                $sum_total_retur += $total_retur;            
+            }
+            
         }
-
 
         //INSERT KE TABEL NILAI PERSEDIAAN
         $checkData = NilaiPersediaan::where('bulan', $bulan)
@@ -153,7 +149,6 @@ class PembelianAOPController extends Controller
     //         $data['status']                 = 'Y';
     //         $data['crea_date']              = Carbon::now();
 
-    //         //dd($data);
     //         $inserted = NilaiPersediaan::create($data);
 
     //         if ($inserted) {
